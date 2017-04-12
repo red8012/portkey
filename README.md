@@ -2,7 +2,30 @@
 
 A Python framework for interacting with in-browser DOM via websockets.
 
-[TOC]
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Description](#description)
+  - [Motivation](#motivation)
+  - [How it works](#how-it-works)
+  - [Limitations](#limitations)
+  - [Recommended Usage](#recommended-usage)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+  - [Automatic](#automatic)
+  - [Manual](#manual)
+- [Usage](#usage)
+    - [Step 1](#step-1)
+    - [Step 2](#step-2)
+    - [Step 3](#step-3)
+    - [Step 4](#step-4)
+- [Documentation and Examples](#documentation-and-examples)
+- [Performance](#performance)
+- [Status](#status)
+- [Todo](#todo)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Description
 
@@ -72,11 +95,11 @@ python setup.py install
 
 After installing Portkey, you can write your first Portkey program using the boilerplate below.
 
-##### Step 1
+#### Step 1
 
 Make an empty directory `myPortkeyProject/` , copy `portkey.js` from this repository to the directory.
 
-##### Step 2
+#### Step 2
 
 Save the following code as `myPortkeyProject/starter.html`.
 
@@ -91,7 +114,7 @@ Save the following code as `myPortkeyProject/starter.html`.
 </html>
 ```
 
-##### Step 3
+#### Step 3
 
 Save the following code as `myPortkeyProject/starter.py`.
 
@@ -105,7 +128,7 @@ async def on_click_btn1(s, d, c):
 start_app()
 ```
 
-##### Step 4
+#### Step 4
 
 Run `python starter.py` under myPortkeyProject directory. Open `starter.html` in your browser. Try clicking on the button, the text on it should become *clicked*.
 
