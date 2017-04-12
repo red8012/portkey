@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.16/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/tomorrow.min.css">
+    <style>
+        pre {
+            border: none;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="uk-navbar-container uk-width-1-1" style="position:fixed;z-index:100;" uk-navbar>
+        <div class="uk-navbar-center">
+            <ul class="uk-navbar-nav" uk-scrollspy-nav="closest: li; scroll: true; offset: 100;">
+                <li><a href="#top">top</a></li>
+                <li><a href="#sample1">onclick</a></li>
+                <li><a href="#sample2">on</a></li>
+                <li><a href="#sample3">ready</a></li>
+                <li><a href="#sample4">with_ui_data</a></li>
+                <li><a href="#sample5">target</a></li>
+                <li><a href="#sample6">eval</a></li>
+                <li><a href="#sample7">callback</a></li>
+                <li><a href="#sample8">broadcast</a></li>
+                <li><a href="#sample9">immediate</a></li>
+                <li><a href="#sample10">filter</a></li>
+                <li><a href="#sample11">throttle</a></li>
+            </ul>
+
+        </div>
+    </nav>
+    <div class="uk-container">
+        <br>
+        <br>
+        <br>
+        <h1 class="uk-heading-primary" id="top">Portkey Examples</h1>
+        <div class="uk-alert-warning uk-width-auto" id="connection-alert" uk-alert>
+            <p> This page cannot connect to the Portkey server. All buttons will not work.
+                <br>Please run "python example.py" so that this demo can function as intended.
+            </p>
+        </div>
+        <br>
+        <h2 class="uk-heading-line" id="boilerplate"> <span>Boilerplate</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            To start building your first app with Portkey, use the boilerplate on the right. You can get <code>starter.html</code> and <code>starter.py</code> in the examples directory.
+                            <br>
+                            <br> Make sure you have Python 3.6 (or above) and installed Portkey by <code>pip install portkey</code>. Include the correct paths to jQuery and <code>portkey.js</code> in your HTML. Then run <code>python portkey.py</code> and open <code>starter.html</code> in your browser, and you are ready to go.
+                            <br>
+                            <br> By default, portkey.js trys connecting to the Portkey backend (starter.py in this example) via <code>ws://127.0.0.1:5000/</code>.
+                            <br> If port 5000 is already in use, please change line 8 in starter.html and the last line in in starter.py to a new port.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT PREVIEW
+                            <br>
+                            <button id="btn">button</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    starter.html
+                    <pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;button id=&quot;btn&quot;&gt;button&lt;/button&gt;
+        &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+        &lt;script&gt;
+            // Optional, modify the port if it's already in use
+            $.portkeyWebsocket = 'ws://127.0.0.1:5000/'
+        &lt;/script&gt;
+        &lt;script src=&quot;../portkey.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre> starter.py
+                    <pre><code class="python">from portkey import *
+
+@onclick('#btn')
+async def on_click_btn1(s, d, c):
+    s('#btn').text('clicked')
+
+start_app(port=5000)</code></pre>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="uk-alert-success" uk-alert>
+            <p>To have some nice styling, we are using <a href="https://getuikit.com">UIkit</a> for the following examples. You can use <a href="http://getbootstrap.com">Bootstrap</a> or other frontend frameworks of your choice and change the class names accordingly.</p>
+        </div>
+        <br>
+        <h2 class="uk-heading-line" id="sample1"> <span>Simple Button</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            This example demonstrates how to register an event handler function to a click event and manipulate DOM via jQuery-like syntax.
+                            <br>
+                            <br> Every handler should be a coroutine function accepting three arguments. The first argument (<code>s</code> in the example) is functionally similar to <code>$</code> in jQuery syntax. If you are familiar with jQuery, you already know how to use it.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <button class="uk-margin-small-top uk-button uk-button-default" id="simple-button">Click me!</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;button class=&quot;uk-button uk-button-default&quot; id=&quot;simple-button&quot;&gt;
+    Click me!
+&lt;/button&gt;</code></pre> Python
+                    <pre><code class="python">@onclick('#simple-button')
+async def simple_button_handler(s, d, c):
+    s('#simple-button').toggleClass('uk-button-primary')</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample2"> <span>Say Hello</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            For handling events other than clicking, use <code>@on('selector', 'event')</code> decorator instead.
+                            <br>
+                            <br> To get data from the DOM, use <code>@with_ui_data()</code> decorator, which accepts keyword arguments with keys being your preferred variable name and values being a tuple denoting the selector and jQuery method (and optionally some extra arguments). Whenever the event is triggered, the data will be put in the second argument <code>d</code> of the handler. Use <code>d.your_argument_name</code> to get the value.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <form class="uk-form-horizontal">
+                                <div>
+                                    <label class="uk-form-label" for="hello-name">Put your name in the box</label>
+                                    <div class="uk-form-controls">
+                                        <input class="uk-input" id="hello-name" type="text" placeholder="John Smith" value="John Smith">
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                            <div class="uk-text-lead uk-text-primary uk-text-center" id="hello-message">
+                                Hello John Smith
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;form&gt;
+    &lt;input class=&quot;uk-input&quot; id=&quot;hello-name&quot; type=&quot;text&quot; value=&quot;John Smith&quot;&gt;
+&lt;form&gt;
+&lt;div class=&quot;uk-text-lead uk-text-primary uk-text-center&quot; id=&quot;hello-name&quot;&gt;
+    Hello John Smith
+&lt;/div&gt;</code></pre> Python
+                    <pre><code class="python">@on('#hello-name', 'keyup')
+@with_ui_data(name=('#hello-name', 'val'))
+async def say_hello(s, d, c):
+    s('#hello-message').text('Hello ' + d.name)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample3"> <span>Counter</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">You can use the third parameter <code>c</code> of the handler to save context information (per session).
+                            <br>
+                            <br>To make initialization to the context, you can wire a handler to <code>@ready()</code> event. Then, it will be triggered when the DOM is fully loaded and connected to your Portkey backend.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <div class="uk-text-lead"> Counter = <span id="counter"> 0 </span></div>
+                            <button class="uk-margin-small-top uk-button uk-button-primary" id="add-one"> + 1 </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;div class=&quot;uk-text-lead&quot;&gt; Counter = &lt;span id=&quot;counter&quot;&gt; 0 &lt;/span&gt; &lt;/div&gt;
+&lt;button class=&quot;uk-button uk-button-primary&quot; id=&quot;add-one&quot;&gt; + 1 &lt;/button&gt;</code></pre> Python
+                    <pre><code class="python">@ready()
+async def on_ready(s, d, c):
+    c.counter = 0
+
+@onclick('#add-one')
+async def counter_add_one(s, d, c):
+    c.counter += 1
+    s('#counter').text(c.counter)</code></pre>
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+        <h2 class="uk-heading-line" id="sample4"> <span>Adder</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">If you want to get properties from <strong>every</strong> element that matches the given selector and return them in a list, you can pass lists (instead of tuples) to <code>@with_ui_data</code> decorator.
+                            <br>
+                            <br>In this example, <code>d.numbers</code> is a list of strings instead of a single string as in the <a href="#sample2">Say Hello</a> example.</p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <br> A =
+                            <input class="uk-input input-number uk-width-1-4" type="number" value="3">
+                            <br> B =
+                            <input class="uk-input input-number uk-width-1-4" type="number" value="5">
+                            <br> A + B = <span id="adder-result">8</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">A = &lt;input class=&quot;uk-input input-number uk-width-1-4&quot; type=&quot;number&quot; value=&quot;3&quot;&gt;&lt;br&gt;
+B = &lt;input class=&quot;uk-input input-number uk-width-1-4&quot; type=&quot;number&quot; value=&quot;5&quot;&gt;&lt;br&gt;
+A + B = &lt;span id=&quot;adder-result&quot;&gt; 8 &lt;/span&gt;</code></pre> Python
+                    <pre><code class="python">@on('.input-number', 'change keyup')
+@with_ui_data(numbers=['.input-number', 'val'])
+async def calculate_addition(s, d, c):
+    try:
+        s('#adder-result').text(sum(int(i) for i in d.numbers))
+    except:
+        pass</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample5"> <span>Get Target</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            There are two special selector strings <code>target</code> and <code>currentTarget</code> for you to get the element emitting the event. They work just like you call <code>$(event.target)</code> or <code>$(event.currentTarget)</code> in your Javascript code.
+                            <br>
+                            <br> They can be used in <code>@with_ui_data</code> and inside the handler.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <br>
+                            <button class="uk-button uk-button-default btn-target" id="btn-a"> Button A </button>
+                            <button class="uk-button uk-button-default btn-target" id="btn-b"> Button B </button>
+                            <div class="uk-text-lead uk-text-primary" id="target-message">
+                                Nothing has been clicked
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;button class=&quot;uk-button uk-button-default btn-target&quot; id=&quot;btn-a&quot;&gt; Button A &lt;/button&gt;
+&lt;button class=&quot;uk-button uk-button-default btn-target&quot; id=&quot;btn-b&quot;&gt; Button B &lt;/button&gt;
+&lt;div class=&quot;uk-text-lead uk-text-primary&quot; id=&quot;target-message&quot;&gt;
+    Nothing has been clicked
+&lt;/div&gt;</code></pre> Python
+                    <pre><code class="python">@onclick('.btn-target')
+@with_ui_data(who=('currentTarget', 'text'))
+async def on_click_target(s, d, c):
+    s('#target-message').text(d.who + ' was clicked')
+    s('currentTarget').toggleClass('uk-button-primary')</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="uk-heading-line" id="sample6"> <span>Eval</span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            Although Portkey provides various functions for manipulating DOM, sometimes you may still want to execute Javascript directly (e.g. interact with some frontend library).
+                            <br><br>To get data from browser, pass a string of valid javascript code to the value of <code>@with_ui_data</code> instead of a tuple or a list shown <a href="#sample2">before</a>.
+                            <br><br>To execute Javascript statements, use <code>s.eval()</code>. If you also want to send some object to the browser before executing the Javascript statements, just append them as keyword arguments.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <div id="just-a-div"> 3.14159265358979 </div>
+                            <button class="uk-button uk-button-primary" id="alert"> alert </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;div id=&quot;just-a-div&quot;&gt; 3.14159265358979 &lt;/div&gt;
+&lt;button class=&quot;uk-button uk-button-primary&quot; id=&quot;alert&quot;&gt; alert &lt;/button&gt;</code></pre> Python
+                    <pre><code class="python">@onclick('#alert')
+@with_ui_data(pi='document.getElementById("just-a-div").textContent')
+async def on_click_alert(s, d, c):
+    s.eval('alert(myObject.pi)', myObject={'pi': d.pi})</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample7"> <span> Passing Callback Functions </span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            You can pass coroutine functions to jQuery methods accepting callback functions (e.g. <code>animate_part2</code> in this example). This mechanism is useful when dealing with animations, or turning event handler on/off dynamically.
+                            <br><br>
+                            <span class="uk-text-warning">Warning:<br>Please do NOT define callback functions <strong>inside</strong> a handler or another callback function. That will cause new function objects being created every time the callback function is executed, leading to memory leak and bad performance.</span>
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <button class="uk-button uk-button-primary" id="btn-animate"> animate </button>
+                            <span class="uk-text-lead uk-text-primary" id="yo-message">
+                                Yo!
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;button class=&quot;uk-button uk-button-primary&quot; id=&quot;btn-animate&quot;&gt; animate &lt;/button&gt;
+&lt;span class=&quot;uk-text-lead uk-text-primary&quot; id=&quot;yo-message&quot;&gt; Yo! &lt;/span&gt;</code></pre> Python
+                    <pre><code class="python">@onclick('#btn-animate')
+async def on_click_animate(s, d, c):
+    s('#yo-message').animate({'opacity': 0}, 1000, animate_part2)
+
+async def animate_part2(s, d, c):
+    s('#yo-message').animate({'opacity': 1}, 1000)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample8"> <span> Broadcasted Counter </span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            In some circumstances, a user may open multiple instances of the same app. To <strong>broadcast</strong> a DOM operation to all instances (browser tabs/windows) that connected to the same Portkey backend, use the <code>broadcast</code> method.
+                            <br><br> For example, if you open this page in two tabs and you click "+1" on one of the two tabs, the counter will increment on <strong>both</strong> tabs.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <div class="uk-text-lead">Counter = <span id="broadcasted-counter"> 0 </span></div>
+                            <button class="uk-margin-small-top uk-button uk-button-primary" id="broadcast-add-one"> + 1 </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;div class=&quot;uk-text-lead&quot;&gt; Counter = &lt;span id=&quot;broadcasted-counter&quot;&gt; 0 &lt;/span&gt;&lt;/div&gt;
+&lt;button class=&quot;uk-button uk-button-primary&quot; id=&quot;broadcast-add-one&quot;&gt; + 1 &lt;/button&gt;</code></pre> Python
+                    <pre><code class="python">broadcast_count = 0
+
+@onclick('#broadcast-add-one')
+async def on_click_broadcast(s, d, c):
+    global broadcast_count
+    broadcast_count += 1
+    s.broadcast('#broadcasted-counter').text(broadcast_count)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample9"> <span> Immediate Actions </span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            To get data from UI dynamically depending on other inputs or logics, use <code>immediate</code> method to get the value return immediately. This method forces Portkey to execute the statement immediately instead of after the handler is returned.
+                            <br><br> To <strong>eval</strong> a piece of Javascript code and get the return value back, use <code>eval_immediately</code> method.
+                            <div class="uk-text-warning uk-text-justify"> Because each immediate action may take several milliseconds to execute, they are bad for performance. Please use them conservatively.</div><br>
+                            <div class="uk-text-success uk-text-justify"> Don't forget to <code>await</code> on every immediate statement.</div>
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <form>
+                                <label>
+                                    <input class="uk-radio" type="radio" name="radio" value="A" checked>
+                                    A
+                                    <input type="text" id="input-A" value="2" class="uk-input uk-form-width-xsmall uk-text-center">
+                                </label>
+                                <label class="uk-margin-medium-left">
+                                    <input class="uk-radio" type="radio" name="radio" value="B">
+                                    B
+                                    <input type="text" id="input-B" value="3" class="uk-input uk-form-width-xsmall uk-text-center">
+                                </label>
+                            </form>
+                            <br>
+                            <button id="get-value" class="uk-margin-small-top uk-button uk-button-primary">
+                                Get selected value
+                            </button>
+                            <br>
+                            <br>
+                            <div class="uk-text-lead" id="selected-value"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;form&gt;
+    &lt;label&gt;
+        &lt;input class=&quot;uk-radio&quot; type=&quot;radio&quot; name=&quot;radio&quot; value=&quot;A&quot; checked&gt;
+        A
+        &lt;input type=&quot;text&quot; id=&quot;input-A&quot; value=&quot;2&quot; class=&quot;uk-input uk-form-width-xsmall uk-text-center&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;uk-margin-medium-left&quot;&gt;
+        &lt;input class=&quot;uk-radio&quot; type=&quot;radio&quot; name=&quot;radio&quot; value=&quot;B&quot;&gt;
+        B
+        &lt;input type=&quot;text&quot; id=&quot;input-B&quot; value=&quot;3&quot; class=&quot;uk-input uk-form-width-xsmall uk-text-center&quot;&gt;
+    &lt;/label&gt;
+&lt;/form&gt;
+&lt;button id=&quot;get-value&quot; class=&quot;uk-margin-small-top uk-button uk-button-primary&quot;&gt;
+    Get selected value
+&lt;/button&gt;
+&lt;div class=&quot;uk-text-lead&quot; id=&quot;selected-value&quot;&gt;&lt;/div&gt;</code></pre> Python
+                    <pre><code class="python">@with_ui_data(selected=('input[name=radio]:checked', 'val'))
+@onclick('#get-value')
+async def on_click_get_value(s, d, c):
+    value = await s.immediate('#input-' + d.selected).val()
+    await s.eval_immediately(
+        'document.getElementById("selected-value").textContent = "Got " + value',
+        value=d.selected + ' = ' + value
+    )</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample10"> <span> Add Buttons </span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            If a certain group of elements is to be added/removed dynamically, you may (should) avoid controlling their handlers by <code>on</code> and <code>off</code> methods. Instead, you can listen on their parent element(s) and filter the descendants of the selected element(s) that trigger the event by <code>filter_selector</code> argument.
+                            <br><br>
+                            <code>@on(A, EVENT, filter_selector=B)</code> in Portkey is roughly equivelant to <code>$(A).on(EVENT, B, ...)</code> in jQuery.
+                            <br><br>You may also add <code>stop_propagation=True</code> parameter to the decorator to prevent the event bubbling up. This is roughly equivelent to running <code>event.stopPropagation()</code> at the end of handler function in jQuery code.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br>
+                            <div uk-grid>
+                                <div class="uk-width-1-2">
+                                    <button id="add-button" class="uk-button uk-button-primary">
+                                        Add a button
+                                    </button>
+                                </div>
+                                <div id="button-area" class="uk-width-1-2">
+                                </div>
+                            </div>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;div uk-grid&gt;
+    &lt;div class=&quot;uk-width-1-2&quot;&gt;
+        &lt;button id=&quot;add-button&quot; class=&quot;uk-button uk-button-primary&quot;&gt;
+            Add a button
+        &lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;button-area&quot; class=&quot;uk-width-1-2&quot;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre> Python
+                    <pre><code class="python">@onclick('#add-button')
+async def on_click_add_button(s, d, c):
+    btn = '&lt;button class=&quot;uk-button uk-button-secondary&quot;&gt; click me &lt;/button&gt;'
+    s('#button-area').append(btn)
+
+@onclick('#button-area', filter_selector='button')
+async def on_click_dynamic_buttons(s, d, c):
+    s('target').toggleClass('uk-button-danger')</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h2 class="uk-heading-line" id="sample11"> <span> Progress Bar </span></h2>
+        <div class="uk-grid-match uk-grid-medium uk-child-width-expand@s uk-grid-divide" uk-grid>
+            <div class="uk-width-2-5">
+                <div class=" uk-card uk-card-default">
+                    <div class="uk-card-body">
+                        <p class="uk-text-justify">
+                            When binding a handler to events that may fire at high frequency (e.g. scrolling), you may want to <strong>throttle</strong> the events to prevent the UI hanging or the backend being too busy. To apply throttling to a certain handler, add <code>throttle=True</code> option to <code>on</code> or <code>onclick</code> decorators.
+                            <br><br>By default, Portkey enqueues new events fired before the return of previous event handler. When using the <code>throttle</code> option, Portkey discards all throttled events when the backend is busy.
+                            <br><br>You can try out the effect of throttling by clicking on the buttons below multiple times.
+                        </p>
+                        <hr class="uk-divider-icon">
+                        <p class="uk-text-muted">
+                            RESULT
+                            <br><br>
+                            <button id="btn-without-throttle" class="uk-button uk-button-default">
+                                without throttle
+                            </button>
+                            <button id="btn-with-throttle" class="uk-button uk-button-default">
+                                with throttle
+                            </button>
+                            <br>
+                            <progress id="progress" class="uk-progress" value="0" max="100"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-5">
+                <div class="uk-padding">
+                    HTML
+                    <pre><code class="html">&lt;button id=&quot;btn-without-throttle&quot; class=&quot;uk-button uk-button-default&quot;&gt;
+    without throttle
+&lt;/button&gt;
+&lt;button id=&quot;btn-with-throttle&quot; class=&quot;uk-button uk-button-default&quot;&gt;
+    with throttle
+&lt;/button&gt;
+&lt;br&gt;
+&lt;progress id=&quot;progress&quot; class=&quot;uk-progress&quot; value=&quot;0&quot; max=&quot;100&quot;/&gt;</code></pre> Python
+                    <pre><code class="python">async def run_progress(s):
+    await s.immediate('#progress').val(0)
+    await asyncio.sleep(0.5)
+    for i in range(0, 101, 10):
+        await asyncio.sleep(0.1)
+        await s.immediate('#progress').val(i)
+
+
+@onclick('#btn-without-throttle')
+async def on_click_without_throttle(s, d, c):
+    await run_progress(s)
+
+
+@onclick('#btn-with-throttle', throttle=True)
+async def on_click_with_throttle(s, d, c):
+    await run_progress(s)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.16/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.16/js/uikit-icons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+
+    </script>
+    <!--        <script>$.portkeyWebsocket = 'ws://127.0.0.1:5001/' </script>-->
+    <script src="../portkey.js"></script>
+</body>
+
+</html>

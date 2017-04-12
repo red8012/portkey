@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h3>Click the button to start testing.</h3>
+
+    <button id="start">Start</button>
+    <h4>Result: <span id="result"></span> ms per round-trip </h4>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        // Optional, modify the port if it's already in use
+        $.portkeyWebsocket = 'ws://127.0.0.1:5000/'
+
+    </script>
+    <script src="../portkey.js"></script>
+</body>
+
+</html>
