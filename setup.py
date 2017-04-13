@@ -6,7 +6,7 @@ if sys.version_info < (3, 6):
 
 setup(
     name='Portkey',
-    version='0.1.0',
+    version='0.1.1',
     packages=['portkey'],
     url='https://github.com/red8012/portkey',
     license='Apache License 2.0',
@@ -19,5 +19,5 @@ setup(
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3.6'
     ],
-    requires=['websockets', 'werkzeug']
+    install_requires=['websockets>=3.2', 'werkzeug>=0.11']
 )
