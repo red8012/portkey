@@ -15,7 +15,8 @@ A Python framework for interacting with in-browser DOM via websockets.
 - [Installation](#installation)
   - [Automatic](#automatic)
   - [Manual](#manual)
-- [Usage](#usage)
+- [Run the Example](#run-the-example)
+- [Getting Started](#getting-started)
     - [Step 1](#step-1)
     - [Step 2](#step-2)
     - [Step 3](#step-3)
@@ -89,9 +90,13 @@ cd portkey
 python setup.py install
 ```
 
+## Run the Example
 
+Click the button below and fill in server name and SSH key. Wait 2 minutes. Then go to the IP of your newly created server. The example page should be up and running.
 
-## Usage
+[][![Dply](https://dply.co/b.svg)](https://dply.co/b/4M2M57Rc) 
+
+## Getting Started
 
 After installing Portkey, you can write your first Portkey program using the boilerplate below.
 
