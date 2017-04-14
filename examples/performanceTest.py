@@ -18,8 +18,8 @@ async def ping(s, d, c):
 
 @on('body', 'e')
 async def pong(s, d, c):
-    if c.counter >= 1000:
-        s('#result').text((time() - c.start))
+    if c.counter >= 100:
+        s('#result').text((time() - c.start) * 10)
         return
     c.counter += 1
     s('body').trigger('e')
