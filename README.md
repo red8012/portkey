@@ -141,6 +141,8 @@ Run `python starter.py` under myPortkeyProject directory. Open `starter.html` in
 
 To get more instructions and useful examples, please clone and run `python examples/example.py` in this repository and open `examples/example.html` in the browser to see interactive examples.
 
+If you just want to see the documentation without installing anything, please visit [documentation](https://rawgit.com/red8012/portkey/master/examples/example.html). Please note that none of the buttons will work in this way because the page is served statically without the portkey server.
+
 ## Performance
 
 Portkey focuses on convenience, not performance. However, it is still possible to do more than 2000 round-trip communications per second between the server and the client (on localhost). It should be sufficient for non-realtime usage.
