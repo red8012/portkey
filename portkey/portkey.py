@@ -11,11 +11,15 @@ from werkzeug._reloader import run_with_reloader  # Sorry, I didn't find any eas
 from .selector import Bundle
 from .utilities import *
 
-loop = asyncio.get_event_loop()
 clients = set()
 
 
 def _start_app(log_level, **ws_options):
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:  # when auto-reloading, it cannot get event loop in the child thread
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
     logger = logging.getLogger('Portkey')
     logger.setLevel(log_level)
     ch = logging.StreamHandler()

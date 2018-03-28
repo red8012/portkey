@@ -6,7 +6,7 @@ if sys.version_info < (3, 6):
 
 setup(
     name='Portkey',
-    version='0.1.1',
+    version='0.1.2',
     packages=['portkey'],
     url='https://github.com/red8012/portkey',
     license='Apache License 2.0',
